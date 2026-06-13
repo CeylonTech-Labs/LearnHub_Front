@@ -1,0 +1,13 @@
+import { Router } from "express";
+import { createCategory, deleteCategory, getCategory, listCategories, updateCategory } from "../controllers/category.controller.js";
+import { authenticate } from "../middlewares/auth.js";
+import { authorize } from "../middlewares/roles.js";
+import { validate } from "../middlewares/validate.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { categorySchema } from "../validators/course.validator.js";
+export const categoryRoutes = Router();
+categoryRoutes.get("/", asyncHandler(listCategories));
+categoryRoutes.get("/:id", asyncHandler(getCategory));
+categoryRoutes.post("/", authenticate, authorize("SUPER_ADMIN", "ADMIN"), validate(categorySchema), asyncHandler(createCategory));
+categoryRoutes.put("/:id", authenticate, authorize("SUPER_ADMIN", "ADMIN"), asyncHandler(updateCategory));
+categoryRoutes.delete("/:id", authenticate, authorize("SUPER_ADMIN", "ADMIN"), asyncHandler(deleteCategory));

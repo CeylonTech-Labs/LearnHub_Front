@@ -1,0 +1,15 @@
+import { Router } from "express";
+import { createLesson, createSection, deleteLesson, deleteSection, updateLesson, updateSection } from "../controllers/course.controller.js";
+import { authenticate } from "../middlewares/auth.js";
+import { authorize } from "../middlewares/roles.js";
+import { validate } from "../middlewares/validate.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { lessonSchema, sectionSchema } from "../validators/course.validator.js";
+export const contentRoutes = Router();
+contentRoutes.use(authenticate, authorize("SUPER_ADMIN", "ADMIN", "INSTRUCTOR"));
+contentRoutes.post("/sections", validate(sectionSchema), asyncHandler(createSection));
+contentRoutes.put("/sections/:id", asyncHandler(updateSection));
+contentRoutes.delete("/sections/:id", asyncHandler(deleteSection));
+contentRoutes.post("/lessons", validate(lessonSchema), asyncHandler(createLesson));
+contentRoutes.put("/lessons/:id", asyncHandler(updateLesson));
+contentRoutes.delete("/lessons/:id", asyncHandler(deleteLesson));

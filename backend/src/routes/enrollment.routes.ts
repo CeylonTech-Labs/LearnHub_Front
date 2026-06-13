@@ -1,0 +1,11 @@
+import { Router } from "express";
+import { courseEnrollments, enroll, myCourses } from "../controllers/enrollment.controller.js";
+import { authenticate } from "../middlewares/auth.js";
+import { authorize } from "../middlewares/roles.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+
+export const enrollmentRoutes = Router();
+enrollmentRoutes.use(authenticate);
+enrollmentRoutes.post("/", authorize("STUDENT", "SUPER_ADMIN", "ADMIN"), asyncHandler(enroll));
+enrollmentRoutes.get("/my-courses", asyncHandler(myCourses));
+enrollmentRoutes.get("/course/:courseId", authorize("SUPER_ADMIN", "ADMIN", "INSTRUCTOR"), asyncHandler(courseEnrollments));

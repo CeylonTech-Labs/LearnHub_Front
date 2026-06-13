@@ -1,0 +1,16 @@
+import { Router } from "express";
+import { createCourse, deleteCourse, getCourse, listCourses, publishCourse, updateCourse, uploadAsset } from "../controllers/course.controller.js";
+import { authenticate } from "../middlewares/auth.js";
+import { authorize } from "../middlewares/roles.js";
+import { upload } from "../middlewares/upload.js";
+import { validate } from "../middlewares/validate.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { courseSchema } from "../validators/course.validator.js";
+export const courseRoutes = Router();
+courseRoutes.get("/", asyncHandler(listCourses));
+courseRoutes.get("/:slug", asyncHandler(getCourse));
+courseRoutes.post("/", authenticate, authorize("SUPER_ADMIN", "ADMIN", "INSTRUCTOR"), validate(courseSchema), asyncHandler(createCourse));
+courseRoutes.post("/upload", authenticate, authorize("SUPER_ADMIN", "ADMIN", "INSTRUCTOR"), upload.single("file"), asyncHandler(uploadAsset));
+courseRoutes.put("/:id", authenticate, authorize("SUPER_ADMIN", "ADMIN", "INSTRUCTOR"), asyncHandler(updateCourse));
+courseRoutes.delete("/:id", authenticate, authorize("SUPER_ADMIN", "ADMIN", "INSTRUCTOR"), asyncHandler(deleteCourse));
+courseRoutes.patch("/:id/publish", authenticate, authorize("SUPER_ADMIN", "ADMIN", "INSTRUCTOR"), asyncHandler(publishCourse));

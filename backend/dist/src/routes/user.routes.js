@@ -1,0 +1,13 @@
+import { Router } from "express";
+import { activity, createUser, deleteUser, getUser, listUsers, updateUser } from "../controllers/user.controller.js";
+import { authenticate } from "../middlewares/auth.js";
+import { authorize } from "../middlewares/roles.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+export const userRoutes = Router();
+userRoutes.use(authenticate, authorize("SUPER_ADMIN", "ADMIN"));
+userRoutes.get("/", asyncHandler(listUsers));
+userRoutes.post("/", asyncHandler(createUser));
+userRoutes.get("/:id", asyncHandler(getUser));
+userRoutes.get("/:id/activity", asyncHandler(activity));
+userRoutes.put("/:id", asyncHandler(updateUser));
+userRoutes.delete("/:id", asyncHandler(deleteUser));

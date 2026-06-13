@@ -1,0 +1,35 @@
+{
+  "info": {
+    "name": "LearnHub LMS API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:5000/api" },
+    { "key": "token", "value": "" }
+  ],
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        { "name": "Register", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/auth/register", "body": { "mode": "raw", "raw": "{\"firstName\":\"Demo\",\"lastName\":\"Student\",\"email\":\"demo@example.com\",\"password\":\"Student@123\",\"role\":\"STUDENT\"}" } } },
+        { "name": "Login", "request": { "method": "POST", "header": [{ "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/auth/login", "body": { "mode": "raw", "raw": "{\"email\":\"student@lms.com\",\"password\":\"Student@123\"}" } } },
+        { "name": "Me", "request": { "method": "GET", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }], "url": "{{baseUrl}}/auth/me" } }
+      ]
+    },
+    {
+      "name": "Courses",
+      "item": [
+        { "name": "List courses", "request": { "method": "GET", "url": "{{baseUrl}}/courses?search=next&page=1&limit=10" } },
+        { "name": "Course detail", "request": { "method": "GET", "url": "{{baseUrl}}/courses/nextjs-full-stack-mastery-1" } },
+        { "name": "Enroll", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/enrollments", "body": { "mode": "raw", "raw": "{\"courseId\":\"replace-course-id\"}" } } }
+      ]
+    },
+    {
+      "name": "Learning",
+      "item": [
+        { "name": "Complete lesson", "request": { "method": "POST", "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key": "Content-Type", "value": "application/json" }], "url": "{{baseUrl}}/progress/complete-lesson", "body": { "mode": "raw", "raw": "{\"lessonId\":\"replace-lesson-id\"}" } } },
+        { "name": "Verify certificate", "request": { "method": "GET", "url": "{{baseUrl}}/certificates/verify/CERT-SEED-1" } }
+      ]
+    }
+  ]
+}
